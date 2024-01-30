@@ -9,7 +9,7 @@ transactions = [['id1',' attribute2', 'value1'], ['id2',' attribute2', 'value2']
 '''
 transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
                 ['15', 'Salary', '200000']]
-DB_Log = [] # <-- You WILL populate this as you go
+DB_Log = {} # <-- You WILL populate this as you go
 
 def recovery_script(log:list):  #<--- Your CODE
     '''
