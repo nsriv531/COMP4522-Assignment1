@@ -26,16 +26,7 @@ def transaction_processing(): #<-- Your CODE
     3. This function does NOT commit the updates, just execute them
     '''
     pass
-
-
-def truncate_data(): #<-- Your CODE
-    '''
-    1. Process transaction in the transaction queue.
-    2. Updates DB_Log accordingly
-    3. This function does NOT commit the updates, just execute them
-    '''
-    pass
-        
+    
 
 def read_file(file_name:str)->list:
     '''
