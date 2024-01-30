@@ -2,7 +2,7 @@
 
 import random
 
-data_base = []  # Global binding for the Database contents
+data_base = {}  # Global binding for the Database contents
 '''
 transactions = [['id1',' attribute2', 'value1'], ['id2',' attribute2', 'value2'],
                 ['id3', 'attribute3', 'value3']]
@@ -27,35 +27,35 @@ def transaction_processing(): #<-- Your CODE
     '''
     pass
 
+# def truncate_data():
+#     global database_dict
 
-def truncate_data(): #<-- update the table
-    
-    pass
+#     # Convert data_base to dictionary
+#     database_dict = convert_to_dictionary(data_base)
+#     print("the dict was made and written to make a new csv file")
+#     # Truncate data (update the table)
+#     # Your truncation logic goes here
+
+#     pass
         
-
-def read_file(file_name:str)->list:
+def read_file(file_name:str) -> dict:
     '''
-    Read the contents of a CSV file line-by-line and return a list of lists
+    Read the contents of a CSV file line-by-line and return a dictionary.
+    Assumes the first element of each sublist is the unique identifier (ID).
     '''
-    data = []
-    #
-    # one line at-a-time reading file
-    #
+    data_base = {}
     with open(file_name, 'r') as reader:
-    # Read and print the entire file line by line
-        line = reader.readline()
-        while line != '':  # The EOF char is an empty string
+        header = reader.readline().strip().split(',')  # Assuming the first line is the header
+        for line in reader:
             line = line.strip().split(',')
-            data.append(line)
-             # get the next line
-            line = reader.readline()
-
-    size = len(data)
+            entry_id = line[0]  # Assuming the ID is the first element
+            data_base[entry_id] = dict(zip(header[1:], line[1:]))  # Creating a dictionary for each entry
+    size = len(data_base)
     print('The data entries BEFORE updates are presented below:')
-    for item in data:
+    for item in data_base.values():
         print(item)
-    print(f"\nThere are {size} records in the database, including one header.\n")
-    return data
+    print(f"\nThere are {size} records in the database, including the header.\n")
+    return data_base
 
 def is_there_a_failure()->bool:
     '''
@@ -69,9 +69,10 @@ def is_there_a_failure()->bool:
     return result
 
 def main():
+    global data_base  # Declare data_base as a global variable
     number_of_transactions = len(transactions)
     must_recover = False
-    data_base = read_file('Employees_DB_ADV.csv')
+    data_base = read_file('./CodeAndData/Employees_DB_ADV.csv')  # Update the global data_base variable
     failure = is_there_a_failure()
     failing_transaction_index = None
     while not failure:
@@ -86,20 +87,19 @@ def main():
                 print(f'There was a failure whilst processing transaction No. {failing_transaction_index}.')
                 break
             else:
-                print(f'Transaction No. {index+1} has been commited! Changes are permanent.')
+                print(f'Transaction No. {index+1} has been committed! Changes are permanent.')
                 
     if must_recover:
-        #Call your recovery script
+        # Call your recovery script
         recovery_script(DB_Log) ### Call the recovery function to restore DB to sound state
     else:
-        # All transactiones ended up well
-        print("All transaction ended up well.")
+        # All transactions ended up well
+        print("All transactions ended up well.")
         print("Updates to the database were committed!\n")
 
     print('The data entries AFTER updates -and RECOVERY, if necessary- are presented below:')
-    for item in data_base:
-        print(item)
-    
+    for key, value in data_base.items():
+        print(f"Key: {key}, Value: {value}")
 main()
 
 
