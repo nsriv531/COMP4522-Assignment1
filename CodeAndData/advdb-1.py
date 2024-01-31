@@ -38,9 +38,9 @@ def truncate_data(data: dict, new_file_name: str):
         for entry_id, entry_data in data.items():
             if not header_written:
                 writer.writerow(['ID'] + list(entry_data.keys()))  # Assuming all entries have the same keys
-            header_written = True
-            # Write data
-        writer.writerow([entry_id] + list(entry_data.values())) 
+                header_written = True
+                # Write data
+            writer.writerow([entry_id] + list(entry_data.values())) 
 
     csvfile.close() 
             
