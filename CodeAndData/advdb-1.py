@@ -102,7 +102,7 @@ def main():
         # All transactions ended up well
         print("All transactions ended up well.")
         print("Updates to the database were committed!\n")
-        truncate_data(data_base, 'hello.csv')
+        truncate_data(data_base, 'transactionsSuccesful.csv')
     print('The data entries AFTER updates -and RECOVERY, if necessary- are presented below:')
     for key, value in data_base.items():
         print(f"Key: {key}, Value: {value}")
