@@ -30,6 +30,7 @@ def transaction_processing(): #<-- Your CODE
 def truncate_data(data: dict, new_file_name: str):
     '''
     Write the contents of the database dictionary to a CSV file with a new filename.
+    Will ONLY trigger if no failure occurs.
     '''
     with open(new_file_name, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -102,7 +103,7 @@ def main():
         # All transactions ended up well
         print("All transactions ended up well.")
         print("Updates to the database were committed!\n")
-        truncate_data(data_base, './CodeAndData/transactionsSuccesful.csv')
+        truncate_data(data_base, './CodeAndData/transactionsSuccesful.csv') #Writes the new csv file if there are no failures.
     print('The data entries AFTER updates -and RECOVERY, if necessary- are presented below:')
     for key, value in data_base.items():
         print(f"Key: {key}, Value: {value}")
