@@ -9,7 +9,7 @@ transactions = [['id1',' attribute2', 'value1'], ['id2',' attribute2', 'value2']
 '''
 transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
                 ['15', 'Salary', '200000']]
-DB_Log = {} # <-- You WILL populate this as you go
+DB_Log = {}# <-- You WILL populate this as you go
 
 def recovery_script(log:list):  #<--- Your CODE
     '''
@@ -27,17 +27,22 @@ def transaction_processing(): #<-- Your CODE
     '''
     pass
 
-# def truncate_data():
-#     global database_dict
-
-#     # Convert data_base to dictionary
-#     database_dict = convert_to_dictionary(data_base)
-#     print("the dict was made and written to make a new csv file")
-#     # Truncate data (update the table)
-#     # Your truncation logic goes here
-
-#     pass
-        
+def truncate_data(data: dict, new_file_name: str):
+    '''
+    Write the contents of the database dictionary to a CSV file with a new filename.
+    '''
+    with open(new_file_name, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        # Write header
+        header_written = False
+        for entry_id, entry_data in data.items():
+            if not header_written:
+                writer.writerow(['ID'] + list(entry_data.keys()))  # Assuming all entries have the same keys
+                header_written = True
+            # Write data
+            writer.writerow([entry_id] + list(entry_data.values()))        
+             
+            
 def read_file(file_name:str) -> dict:
     '''
     Read the contents of a CSV file line-by-line and return a dictionary.
@@ -96,10 +101,11 @@ def main():
         # All transactions ended up well
         print("All transactions ended up well.")
         print("Updates to the database were committed!\n")
-
+        truncate_data(data_base, 'hello.csv')
     print('The data entries AFTER updates -and RECOVERY, if necessary- are presented below:')
     for key, value in data_base.items():
         print(f"Key: {key}, Value: {value}")
+    
 main()
 
 
