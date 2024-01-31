@@ -1,5 +1,5 @@
 # Adv DB Winter 2024 - 1
-
+import csv 
 import random
 
 data_base = {}  # Global binding for the Database contents
@@ -38,10 +38,11 @@ def truncate_data(data: dict, new_file_name: str):
         for entry_id, entry_data in data.items():
             if not header_written:
                 writer.writerow(['ID'] + list(entry_data.keys()))  # Assuming all entries have the same keys
-                header_written = True
+            header_written = True
             # Write data
-            writer.writerow([entry_id] + list(entry_data.values()))        
-             
+        writer.writerow([entry_id] + list(entry_data.values())) 
+
+    csvfile.close() 
             
 def read_file(file_name:str) -> dict:
     '''
