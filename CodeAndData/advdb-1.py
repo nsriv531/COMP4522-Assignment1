@@ -32,7 +32,14 @@ def truncate_data(data: dict, new_file_name: str):
     Write the contents of the database dictionary to a CSV file with a new filename.
     Will ONLY trigger if no failure occurs.
     '''
+    for transaction in transactions:
+        key = transaction[0]  # Assuming the key is the first item in each transaction
+        attribute = transaction[1]
+        new_value = transaction[2]
+        if key in data:
+            data[key][attribute] = new_value
     with open(new_file_name, 'w', newline='') as csvfile:
+        
         writer = csv.writer(csvfile)
         # Write header
         header_written = False
