@@ -1,4 +1,5 @@
 # Adv DB Winter 2024 - 1
+from collections import OrderedDict
 import csv 
 import random
 import datetime
@@ -10,28 +11,60 @@ transactions = [['id1',' attribute2', 'value1'], ['id2',' attribute2', 'value2']
 '''
 transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
                 ['15', 'Salary', '200000']]
-DB_Log = {}# <-- You WILL populate this as you go
+DB_Log = OrderedDict()# <-- You WILL populate this as you go
 
-def recovery_script(log:list, slay, DB_Log:dict):  
+def recovery_script(log: list, slay, DB_Log: OrderedDict):
     '''
     Restore the database to stable and sound condition, by processing the DB log.
     '''
     print("Calling your recovery script with DB_Log as an argument.")
     print("Recovery in process ...\n")
-    
+
     # Extract unique IDs from transactions
-    unique_ids = set(transaction[0] for transaction in transactions)
-    
-    # Populate DB_Log with data from data_base for unique IDs 1, 5, and 15
-    for unique_id in unique_ids:
+    for transaction in transactions:
+        unique_id = transaction[0]
         if unique_id in data_base:
             DB_Log[unique_id] = data_base[unique_id]
-    
-    # Print off the DB_Log dictionary
+
+    # Flagging the status based on the slay parameter
+    if slay == 1:
+        for key in DB_Log:
+            DB_Log[key]['STATUS'] = 'failed'
+    elif slay == 2:
+        first_key = next(iter(DB_Log))
+        DB_Log[first_key]['STATUS'] = 'committed'
+        for key in list(DB_Log.keys())[1:]:
+            DB_Log[key]['STATUS'] = 'failed'
+    elif slay == 3:
+        committed_keys = ['1', '5']
+        for key in committed_keys:
+            DB_Log[key]['STATUS'] = 'committed'
+        for key in DB_Log.keys() - set(committed_keys):
+            DB_Log[key]['STATUS'] = 'failed'
+            
+    for key, value in DB_Log.items():
+        if value['STATUS'] == 'committed':
+            transaction = [key] + list(value.values())[1:]  # Extracting transaction details
+            for item in transactions:
+                if item[0] == key:  # Matching transaction ID
+                    attribute_to_change = item[1]
+                    new_value = item[2]
+                    data_base[key][attribute_to_change] = new_value  # Update the specific attribute in data_base
+                    break
+
+    # Write changes to transactionsUnsuccesful.csv
+    with open('./CodeAndData/transactionsUnsuccesful.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        header_written = False
+        for entry_id, entry_data in data_base.items():
+            if not header_written:
+                writer.writerow(['ID'] + list(entry_data.keys())) 
+                header_written = True
+            writer.writerow([entry_id] + [entry_data.get(attribute, '') for attribute in list(DB_Log.values())[0].keys()])
+
     print("DB_Log dictionary after recovery:")
     for key, value in DB_Log.items():
         print(f"Key: {key}, Value: {value}")
-    print(slay)
     pass
 
 def transaction_processing(): #<-- Your CODE
@@ -55,7 +88,6 @@ def truncate_data(data: dict, new_file_name: str):
         if key in data:
             data[key][attribute] = new_value
     with open(new_file_name, 'w', newline='') as csvfile:
-        
         writer = csv.writer(csvfile)
         header_written = False
         for entry_id, entry_data in data.items():
@@ -63,7 +95,6 @@ def truncate_data(data: dict, new_file_name: str):
                 writer.writerow(['ID'] + list(entry_data.keys())) 
                 header_written = True
             writer.writerow([entry_id] + list(entry_data.values())) 
-
     csvfile.close() 
             
 def read_file(file_name:str) -> dict:
