@@ -11,7 +11,7 @@ transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
                 ['15', 'Salary', '200000']]
 DB_Log = {}# <-- You WILL populate this as you go
 
-def recovery_script(log:list, DB_Log:dict):  
+def recovery_script(log:list, slay, DB_Log:dict):  
     '''
     Restore the database to stable and sound condition, by processing the DB log.
     '''
@@ -30,7 +30,7 @@ def recovery_script(log:list, DB_Log:dict):
     print("DB_Log dictionary after recovery:")
     for key, value in DB_Log.items():
         print(f"Key: {key}, Value: {value}")
-    
+    print(slay)
     pass
 
 def transaction_processing(): #<-- Your CODE
@@ -117,7 +117,7 @@ def main():
                 
     if must_recover:
         # Call your recovery script
-        recovery_script([], DB_Log) ### Call the recovery function to restore DB to sound state
+        recovery_script([], failing_transaction_index, DB_Log) ### Call the recovery function to restore DB to sound state
     else:
         # All transactions ended up well
         print("All transactions ended up well.")
