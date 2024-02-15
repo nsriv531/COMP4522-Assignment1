@@ -11,12 +11,26 @@ transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
                 ['15', 'Salary', '200000']]
 DB_Log = {}# <-- You WILL populate this as you go
 
-def recovery_script(log:list):  #<--- Your CODE
+def recovery_script(log:list, DB_Log:dict):  
     '''
     Restore the database to stable and sound condition, by processing the DB log.
     '''
     print("Calling your recovery script with DB_Log as an argument.")
     print("Recovery in process ...\n")
+    
+    # Extract unique IDs from transactions
+    unique_ids = set(transaction[0] for transaction in transactions)
+    
+    # Populate DB_Log with data from data_base for unique IDs 1, 5, and 15
+    for unique_id in unique_ids:
+        if unique_id in data_base:
+            DB_Log[unique_id] = data_base[unique_id]
+    
+    # Print off the DB_Log dictionary
+    print("DB_Log dictionary after recovery:")
+    for key, value in DB_Log.items():
+        print(f"Key: {key}, Value: {value}")
+    
     pass
 
 def transaction_processing(): #<-- Your CODE
@@ -33,7 +47,7 @@ def truncate_data(data: dict, new_file_name: str):
     Will ONLY trigger if no failure occurs.
     '''
     for transaction in transactions:
-        key = transaction[0]  # Assuming the key is the first item in each transaction
+        key = transaction[0]
         attribute = transaction[1]
         new_value = transaction[2]
         if key in data:
@@ -105,7 +119,7 @@ def main():
                 
     if must_recover:
         # Call your recovery script
-        recovery_script(DB_Log) ### Call the recovery function to restore DB to sound state
+        recovery_script([], DB_Log) ### Call the recovery function to restore DB to sound state
     else:
         # All transactions ended up well
         print("All transactions ended up well.")
@@ -114,7 +128,7 @@ def main():
     print('The data entries AFTER updates -and RECOVERY, if necessary- are presented below:')
     for key, value in data_base.items():
         print(f"Key: {key}, Value: {value}")
-    
+        
 main()
 
 
