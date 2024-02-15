@@ -13,7 +13,7 @@ transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
                 ['15', 'Salary', '200000']]
 DB_Log = OrderedDict()# <-- You WILL populate this as you go
 
-def recovery_script(log: list, slay, DB_Log: OrderedDict):
+def recovery_script(log: list, transaction_id, DB_Log: OrderedDict):
     '''
     Restore the database to stable and sound condition, by processing the DB log.
     '''
@@ -26,16 +26,16 @@ def recovery_script(log: list, slay, DB_Log: OrderedDict):
         if unique_id in data_base:
             DB_Log[unique_id] = data_base[unique_id]
 
-    # Flagging the status based on the slay parameter
-    if slay == 1:
+    # Flagging the status based on the transaction_id parameter
+    if transaction_id == 1:
         for key in DB_Log:
             DB_Log[key]['STATUS'] = 'rolled back'
-    elif slay == 2:
+    elif transaction_id == 2:
         first_key = next(iter(DB_Log))
         DB_Log[first_key]['STATUS'] = 'committed'
         for key in list(DB_Log.keys())[1:]:
             DB_Log[key]['STATUS'] = 'rolled back'
-    elif slay == 3:
+    elif transaction_id == 3:
         committed_keys = ['1', '5']
         for key in committed_keys:
             DB_Log[key]['STATUS'] = 'committed'
