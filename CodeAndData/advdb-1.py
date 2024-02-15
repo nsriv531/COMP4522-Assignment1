@@ -2,7 +2,7 @@
 from collections import OrderedDict
 import csv 
 import random
-import datetime
+from datetime import datetime
 
 data_base = {}  # Global binding for the Database contents
 '''
@@ -64,7 +64,10 @@ def recovery_script(log: list, slay, DB_Log: OrderedDict):
 
     print("DB_Log dictionary after recovery:")
     for key, value in DB_Log.items():
-        print(f"Key: {key}, Value: {value}")
+        # print(f"Key: {key}, Value: {value}")
+        # print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        current_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print(f"Key: {key}, Value: {value}, Timestamp: {current_timestamp}")
     pass
 
 def transaction_processing(): #<-- Your CODE
@@ -73,6 +76,7 @@ def transaction_processing(): #<-- Your CODE
     2. Updates DB_Log accordingly
     3. This function does NOT commit the updates, just execute them
     '''
+    
     pass
 
 def truncate_data(data: dict, new_file_name: str):
@@ -147,10 +151,12 @@ def main():
                 break
             else:
                 print(f'Transaction No. {index+1} has been committed! Changes are permanent.')
+                print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                 
     if must_recover:
         # Call your recovery script
-        recovery_script([], failing_transaction_index, DB_Log) ### Call the recovery function to restore DB to sound state
+        recovery_script([], failing_transaction_index, DB_Log)
+        print(f"Recovery completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     else:
         # All transactions ended up well
         print("All transactions ended up well.")
