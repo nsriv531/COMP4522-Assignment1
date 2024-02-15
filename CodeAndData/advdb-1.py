@@ -1,6 +1,7 @@
 # Adv DB Winter 2024 - 1
 import csv 
 import random
+import datetime
 
 data_base = {}  # Global binding for the Database contents
 '''
@@ -46,6 +47,7 @@ def truncate_data(data: dict, new_file_name: str):
     Write the contents of the database dictionary to a CSV file with a new filename.
     Will ONLY trigger if no failure occurs.
     '''
+
     for transaction in transactions:
         key = transaction[0]
         attribute = transaction[1]
