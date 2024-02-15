@@ -33,7 +33,7 @@ def truncate_data(data: dict, new_file_name: str):
     Will ONLY trigger if no failure occurs.
     '''
     for transaction in transactions:
-        key = transaction[0]  # Assuming the key is the first item in each transaction
+        key = transaction[0] 
         attribute = transaction[1]
         new_value = transaction[2]
         if key in data:
@@ -41,13 +41,11 @@ def truncate_data(data: dict, new_file_name: str):
     with open(new_file_name, 'w', newline='') as csvfile:
         
         writer = csv.writer(csvfile)
-        # Write header
         header_written = False
         for entry_id, entry_data in data.items():
             if not header_written:
-                writer.writerow(['ID'] + list(entry_data.keys()))  # Assuming all entries have the same keys
+                writer.writerow(['ID'] + list(entry_data.keys())) 
                 header_written = True
-                # Write data
             writer.writerow([entry_id] + list(entry_data.values())) 
 
     csvfile.close() 
