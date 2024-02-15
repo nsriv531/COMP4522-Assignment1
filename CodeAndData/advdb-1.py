@@ -28,18 +28,18 @@ def recovery_script(log: list, slay, DB_Log: OrderedDict):
     # Flagging the status based on the slay parameter
     if slay == 1:
         for key in DB_Log:
-            DB_Log[key]['STATUS'] = 'failed'
+            DB_Log[key]['STATUS'] = 'rolled back'
     elif slay == 2:
         first_key = next(iter(DB_Log))
         DB_Log[first_key]['STATUS'] = 'committed'
         for key in list(DB_Log.keys())[1:]:
-            DB_Log[key]['STATUS'] = 'failed'
+            DB_Log[key]['STATUS'] = 'rolled back'
     elif slay == 3:
         committed_keys = ['1', '5']
         for key in committed_keys:
             DB_Log[key]['STATUS'] = 'committed'
         for key in DB_Log.keys() - set(committed_keys):
-            DB_Log[key]['STATUS'] = 'failed'
+            DB_Log[key]['STATUS'] = 'rolled back'
             
     for key, value in DB_Log.items():
         if value['STATUS'] == 'committed':
@@ -74,7 +74,7 @@ def transaction_processing(): #<-- Your CODE
     '''
     pass
 
-def truncate_data(data: dict, new_file_name: str):
+def successful_Transactions(data: dict, new_file_name: str):
     '''
     Write the contents of the database dictionary to a CSV file with a new filename.
     Will ONLY trigger if no failure occurs.
@@ -153,7 +153,7 @@ def main():
         # All transactions ended up well
         print("All transactions ended up well.")
         print("Updates to the database were committed!\n")
-        truncate_data(data_base, './CodeAndData/transactionsSuccesful.csv') #Writes the new csv file if there are no failures.
+        successful_Transactions(data_base, './CodeAndData/transactionsSuccesful.csv') #Writes the new csv file if there are no failures.
     print('The data entries AFTER updates -and RECOVERY, if necessary- are presented below:')
     for key, value in data_base.items():
         print(f"Key: {key}, Value: {value}")
