@@ -14,7 +14,7 @@ transactions = [['1', 'Department', 'Music'], ['5', 'Civil_status', 'Divorced'],
 DB_Log = OrderedDict()
 
 #processes the DB_Log to recover the database based on transaction statuses,as well as updates the database, and logs recovery details
-def recovery_script(log: list, slay, DB_Log: OrderedDict):
+def recovery_script(log: list, transaction_id, DB_Log: OrderedDict):
     '''
     Restore the database to stable and sound condition, by processing the DB log.
     '''
